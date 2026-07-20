@@ -2,490 +2,1209 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Louzada Digital Hub: clube de IA e tecnologia com consultoria, diagnóstico e plano prático para aplicar IA no dia a dia da sua empresa." />
-  <meta name="theme-color" content="#F7F9FC" />
-  <title>Louzada Digital Hub | IA e tecnologia com clareza para sua empresa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Louzada Digital Hub: clube de IA e tecnologia com consultoria, diagnóstico e plano prático para empresas." />
+  <title>Louzada Digital Hub | IA e tecnologia com clareza</title>
+  <link rel="icon" href="images/monogram.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="images/monogram.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: "VM Sans";
+      src: local("VM Sans"), local("VMSans"),
+        url("fonts/VMSans.woff2") format("woff2"),
+        url("fonts/VMSans-Regular.woff2") format("woff2");
+      font-weight: 400 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #ffffff;
+      --accent: #0061FE;
+      --line: rgba(255, 255, 255, 0.18);
+      --glass: rgba(12, 18, 32, 0.45);
+      --glass-strong: rgba(255, 255, 255, 0.1);
+      --font: "VM Sans", "DM Sans", system-ui, -apple-system, sans-serif;
+      --banner-h: 900px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: #000;
+      color: var(--ink);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button {
+      font-family: inherit;
+      color: inherit;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* ===== Scroll + sticky film ===== */
+    .scroll-track {
+      position: relative;
+      width: 100%;
+      height: 6000px;
+    }
+
+    .stage {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: var(--banner-h);
+      max-height: 100dvh;
+      overflow: hidden;
+      background: #000;
+    }
+
+    @media (max-height: 900px) {
+      .stage { height: 100dvh; height: 100vh; }
+    }
+
+    #sequence {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+
+    #scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 62% at 50% 42%, rgba(0,0,0,.18) 0%, rgba(0,0,0,.5) 70%, rgba(0,0,0,.72) 100%),
+        linear-gradient(180deg, rgba(0,0,0,.42) 0%, transparent 20%, transparent 70%, rgba(0,0,0,.55) 100%);
+      transition: opacity .35s ease;
+    }
+
+    /* ===== Panels (sections) over film ===== */
+    .panel {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(18px);
+      transition: opacity .45s ease, transform .45s ease, visibility .45s;
+      padding: 1.1rem 0 1.25rem;
+    }
+
+    .panel.is-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: none;
+      transform: translateY(0);
+    }
+
+    .panel.is-active a,
+    .panel.is-active button {
+      pointer-events: auto;
+    }
+
+    .panel-inner {
+      width: min(100% - 2.5rem, 68rem);
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    /* Topbar (hero only, but contact always usable via footer) */
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: .75rem;
+      flex-shrink: 0;
+      min-height: 2.75rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      font-weight: 600;
+      font-size: .9rem;
+      letter-spacing: -.02em;
+      justify-self: start;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .brand img {
+      height: 1.85rem;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .brand em {
+      font-style: normal;
+      display: block;
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .85;
+      margin-top: .08rem;
+    }
+
+    .nav-pills {
+      display: none;
+      align-items: center;
+      gap: .15rem;
+      padding: .22rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-pills a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 1.95rem;
+      padding: .3rem .85rem;
+      border-radius: 999px;
+      font-size: .8125rem;
+      font-weight: 500;
+      color: #fff;
+      white-space: nowrap;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .nav-pills a:hover { background: rgba(255,255,255,.1); }
+    .nav-pills a.is-active {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .menu-btn {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      min-height: 2.25rem;
+      padding: .35rem .8rem .35rem .95rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: .8125rem;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .menu-btn .dots {
+      width: 1.35rem;
+      height: 1.35rem;
+      border-radius: 50%;
+      background: #fff;
+      color: #000;
+      display: grid;
+      place-items: center;
+      font-size: .7rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    @media (min-width: 900px) {
+      .nav-pills { display: inline-flex; }
+    }
+
+    /* Hero */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 0;
+      padding: .4rem 0;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 54px;
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: -.03em;
+      color: #fff;
+      text-wrap: balance;
+      max-width: 18ch;
+      text-shadow: 0 2px 28px rgba(0,0,0,.4);
+    }
+
+    .hero .lede {
+      margin: 12px 0 0;
+      max-width: 32rem;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #fff;
+      text-shadow: 0 1px 16px rgba(0,0,0,.45);
+    }
+
+    .cta {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      min-height: 2.6rem;
+      padding: .4rem .4rem .4rem 1.15rem;
+      border-radius: 999px;
+      background: #fff;
+      color: #000;
+      font-size: .875rem;
+      font-weight: 600;
+      box-shadow: 0 6px 22px rgba(0,0,0,.35);
+      transition: opacity .15s ease, transform .12s ease;
+    }
+
+    .cta:hover { opacity: .94; }
+    .cta:active { transform: scale(.98); }
+
+    .cta-icon {
+      width: 1.85rem;
+      height: 1.85rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .cta-icon svg {
+      width: .9rem;
+      height: .9rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .features-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .75rem;
+      flex-shrink: 0;
+    }
+
+    .feature-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .7rem;
+      align-items: start;
+      width: 100%;
+      max-width: 280px;
+      padding: .85rem .95rem;
+      border-radius: .9rem;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: #fff;
+    }
+
+    .feature-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: .55rem;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.1);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .feature-icon.light {
+      background: #fff;
+      color: var(--accent);
+      border-color: transparent;
+    }
+
+    .feature-icon svg {
+      width: 1rem;
+      height: 1rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-icon svg.is-fill { fill: currentColor; stroke: none; }
+
+    .feature-card h2,
+    .feature-card h3 {
+      margin: 0 0 .2rem;
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: -.015em;
+      color: #fff;
+      line-height: 1.25;
+    }
+
+    .feature-card p {
+      margin: 0;
+      font-size: .78rem;
+      line-height: 1.4;
+      font-weight: 400;
+      color: #fff;
+      opacity: .88;
+    }
+
+    /* Section eyebrow / titles */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: .75;
+      margin: 0 0 .85rem;
+    }
+
+    .section-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 0;
+    }
+
+    .section-center h2 {
+      margin: 0;
+      font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+      font-weight: 500;
+      letter-spacing: -.03em;
+      line-height: 1.15;
+      max-width: 18ch;
+      text-wrap: balance;
+      color: #fff;
+      text-shadow: 0 2px 24px rgba(0,0,0,.4);
+    }
+
+    .section-center h2.serif-look {
+      font-weight: 500;
+      font-style: italic;
+      letter-spacing: -.02em;
+    }
+
+    .section-center .lede {
+      margin: .9rem 0 0;
+      max-width: 28rem;
+      font-size: .95rem;
+      line-height: 1.5;
+      color: #fff;
+      opacity: .9;
+    }
+
+    /* Logo strip */
+    .logo-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem 2.25rem;
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 52rem;
+    }
+
+    .logo-chip {
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: .55;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+    }
+
+    .logo-chip i {
+      display: block;
+      width: 1.1rem;
+      height: 1.1rem;
+      border-radius: .25rem;
+      border: 1px solid rgba(255,255,255,.35);
+      opacity: .8;
+    }
+
+    /* About: floating glass cards */
+    .float-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .75rem;
+      align-content: center;
+      min-height: 0;
+      width: 100%;
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 800px) {
+      .float-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.25rem;
+      }
+      .float-grid .span-full {
+        grid-column: 1 / -1;
+        max-width: 36rem;
+        margin-inline: auto;
+        text-align: center;
+        margin-bottom: .5rem;
+      }
+    }
+
+    .glass-card {
+      border-radius: 1rem;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(0,20,50,.35));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 1.1rem 1.15rem;
+      color: #fff;
+      box-shadow: 0 10px 40px rgba(0,0,0,.25);
+      transition: transform .25s ease, border-color .2s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.3);
+    }
+
+    .glass-card .tag {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      opacity: .65;
+      margin-bottom: .45rem;
+    }
+
+    .glass-card h3 {
+      margin: 0 0 .35rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      line-height: 1.25;
+    }
+
+    .glass-card p {
+      margin: 0;
+      font-size: .85rem;
+      line-height: 1.45;
+      opacity: .88;
+    }
+
+    .spark {
+      color: #fff;
+      opacity: .85;
+      margin-right: .25rem;
+    }
+
+    /* Testimonial */
+    .testimonial {
+      flex: 1;
+      display: grid;
+      gap: 1rem;
+      align-items: center;
+      align-content: center;
+      min-height: 0;
+      width: 100%;
+      max-width: 58rem;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 860px) {
+      .testimonial {
+        grid-template-columns: 240px 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    .photo-card {
+      border-radius: 1.1rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      aspect-ratio: 1;
+      max-width: 280px;
+      margin-inline: auto;
+      width: 100%;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .quote-card {
+      border-radius: 1.1rem;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(0,97,254,.28), rgba(8,16,36,.55));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 1.35rem 1.4rem;
+      color: #fff;
+      box-shadow: 0 12px 40px rgba(0,0,0,.28);
+    }
+
+    .quote-card blockquote {
+      margin: 0;
+      font-size: clamp(.95rem, .85rem + .4vw, 1.15rem);
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: -.01em;
+      text-transform: uppercase;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,.15);
+    }
+
+    .metrics strong {
+      display: block;
+      font-size: clamp(1.15rem, 1rem + 1vw, 1.65rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+    }
+
+    .metrics span {
+      display: block;
+      margin-top: .25rem;
+      font-size: .72rem;
+      opacity: .75;
+    }
+
+    .quote-card cite {
+      display: block;
+      margin-top: 1rem;
+      font-style: normal;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      opacity: .85;
+    }
+
+    .quote-card cite small {
+      display: block;
+      font-weight: 400;
+      opacity: .7;
+      margin-top: .15rem;
+      letter-spacing: 0;
+    }
+
+    /* 4-card feature layout */
+    .quad {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .75rem;
+      align-content: center;
+      min-height: 0;
+      width: 100%;
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 760px) {
+      .quad {
+        grid-template-columns: 1fr 1fr;
+        gap: .9rem 1.1rem;
+      }
+    }
+
+    .quad .feature-card {
+      max-width: none;
+    }
+
+    .quad .feature-card h3 {
+      font-size: 1rem;
+    }
+
+    .quad .feature-card p {
+      font-size: .82rem;
+    }
+
+    /* Footer bar inside last panel / always */
+    .site-footer {
+      position: relative;
+      z-index: 3;
+      background: #05070d;
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding: 1.5rem 1.25rem 1.75rem;
+      color: #fff;
+    }
+
+    .footer-inner {
+      width: min(100%, 68rem);
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 800px) {
+      .footer-inner {
+        grid-template-columns: 1.4fr 1fr 1fr;
+        align-items: start;
+      }
+    }
+
+    .footer-inner h3 {
+      margin: 0 0 .5rem;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .7;
+    }
+
+    .footer-inner p,
+    .footer-inner a {
+      margin: 0 0 .35rem;
+      font-size: .875rem;
+      line-height: 1.45;
+      color: #fff;
+      opacity: .9;
+    }
+
+    .footer-inner a:hover { opacity: 1; text-decoration: underline; }
+
+    .footer-legal {
+      margin-top: .75rem;
+      padding-top: .85rem;
+      border-top: 1px solid rgba(255,255,255,.1);
+      font-size: .78rem;
+      opacity: .65;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 {
+        font-size: clamp(1.7rem, 6.5vw, 2.35rem);
+      }
+      .feature-card { max-width: 100%; }
+      .menu-btn span.label { display: none; }
+      .menu-btn {
+        padding: .3rem;
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 50%;
+        justify-content: center;
+      }
+      .menu-btn .dots { width: 100%; height: 100%; }
+      .panel-inner { width: min(100% - 1.25rem, 68rem); }
+      .metrics { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-track { height: var(--banner-h) !important; }
+      .panel { transition: none; }
+    }
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <div class="scroll-track" id="track">
+    <div class="stage" id="stage">
+      <canvas id="sequence" width="1920" height="1080" aria-hidden="true"></canvas>
+      <div id="scrim" aria-hidden="true"></div>
 
-  <header class="site-header" data-header>
-    <div class="shell header-inner">
-      <a class="brand" href="#topo" aria-label="Louzada Digital Hub - início">
-        <img src="images/mark-light.png" alt="" width="40" height="34" class="brand-mark" />
-        <span class="brand-text">Louzada <em>Digital Hub</em></span>
-      </a>
+      <!-- 0: HERO -->
+      <section class="panel is-active" data-panel="0" aria-label="Início">
+        <div class="panel-inner">
+          <header class="topbar">
+            <a class="brand" href="/" aria-label="Louzada Digital Hub">
+              <img src="images/mark.png" alt="" width="40" height="34" />
+              <span>Louzada<em>Digital Hub</em></span>
+            </a>
+            <nav class="nav-pills" aria-label="Principal">
+              <a class="is-active" href="#inicio" data-jump="0">Início</a>
+              <a href="#confianca" data-jump="1">Confiança</a>
+              <a href="#protocolo" data-jump="2">Protocolo</a>
+              <a href="#prova" data-jump="3">Prova</a>
+              <a href="#beneficios" data-jump="4">Benefícios</a>
+            </nav>
+            <a class="menu-btn" href="tel:+5553991836803" aria-label="Ligar para Emiliano Louzada">
+              <span class="label">Falar agora</span>
+              <span class="dots" aria-hidden="true">→</span>
+            </a>
+          </header>
 
-      <nav class="nav-desktop" aria-label="Principal">
-        <a href="#mecanismo">Protocolo</a>
-        <a href="#como-funciona">Como funciona</a>
-        <a href="#preco">Investimento</a>
-        <a href="#faq">FAQ</a>
-      </nav>
+          <div class="hero" id="inicio">
+            <h1>Sua empresa ainda decide na intuição. A concorrência já usa IA.</h1>
+            <p class="lede">
+              Em poucos encontros, você sai com clareza, diagnóstico e um plano prático para aplicar tecnologia de verdade no seu negócio.
+            </p>
+            <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20destravar%20minha%20empresa">
+              Destravar minha empresa
+              <span class="cta-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+          </div>
 
-      <div class="header-actions">
-        <a class="btn btn-primary btn-sm header-cta" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20no%20Louzada%20Digital%20Hub">
-          Entrar agora
-        </a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" data-nav-toggle>
-          <span class="sr-only">Abrir menu</span>
-          <span class="nav-toggle-bar" aria-hidden="true"></span>
-          <span class="nav-toggle-bar" aria-hidden="true"></span>
-          <span class="nav-toggle-bar" aria-hidden="true"></span>
-        </button>
-      </div>
+          <div class="features-row">
+            <article class="feature-card">
+              <div class="feature-icon light" aria-hidden="true">
+                <svg class="is-fill" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+              </div>
+              <div>
+                <h2>Diagnóstico no gargalo</h2>
+                <p>Identifica o que mais consome tempo e dinheiro antes de comprar ferramenta.</p>
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon light" aria-hidden="true">
+                <svg class="is-fill" viewBox="0 0 24 24"><path d="M12 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm0 1.5c-3.2 0-7 1.5-7 4.25V20h14v-2.25c0-2.75-3.8-4.25-7-4.25z"/></svg>
+              </div>
+              <div>
+                <h2>Adoção real pela equipe</h2>
+                <p>IA na rotina, sem assinatura parada. Uso prático em vendas, atendimento e gestão.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1: TRUST -->
+      <section class="panel" data-panel="1" aria-label="Confiança" id="confianca">
+        <div class="panel-inner">
+          <div class="section-center">
+            <p class="eyebrow">Louzada Digital Hub</p>
+            <h2 class="serif-look">Clareza e direção para quem lidera de verdade</h2>
+            <p class="lede">
+              Ajudamos donos e gestores a sair da bagunça operacional e colocar IA no dia a dia com priorização e adoção real.
+            </p>
+            <div class="logo-strip" aria-label="Focos de atuação">
+              <span class="logo-chip"><i></i> Vendas</span>
+              <span class="logo-chip"><i></i> Atendimento</span>
+              <span class="logo-chip"><i></i> Operação</span>
+              <span class="logo-chip"><i></i> Gestão</span>
+              <span class="logo-chip"><i></i> Produtividade</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2: PROTOCOL / ABOUT -->
+      <section class="panel" data-panel="2" aria-label="Protocolo" id="protocolo">
+        <div class="panel-inner">
+          <div class="float-grid">
+            <div class="span-full">
+              <p class="eyebrow">✦ Protocolo 360</p>
+              <h2 style="margin:0;font-size:clamp(1.5rem,1.1rem + 1.6vw,2.25rem);font-weight:500;letter-spacing:-.03em;line-height:1.2;color:#fff;text-wrap:balance;">
+                O hub que entrega direção, adoção e aplicação real no negócio
+              </h2>
+              <p class="lede" style="margin-inline:auto;">
+                Não é curso gravado nem ferramenta solta. É diagnóstico, prioridade e acompanhamento na vida real da empresa.
+              </p>
+            </div>
+            <article class="glass-card">
+              <div class="tag">Strategy</div>
+              <h3><span class="spark">✦</span> Diagnóstico focado</h3>
+              <p>Mapeia o gargalo que mais consome tempo e dinheiro antes de qualquer compra de sistema.</p>
+            </article>
+            <article class="glass-card">
+              <div class="tag">Growth</div>
+              <h3><span class="spark">✦</span> Prioridade de implementação</h3>
+              <p>Define o que fazer primeiro para gerar ganho rápido sem bagunçar a operação inteira.</p>
+            </article>
+            <article class="glass-card">
+              <div class="tag">Creative</div>
+              <h3><span class="spark">✦</span> Curadoria de ferramentas</h3>
+              <p>Filtra o que serve para o seu cenário e evita desperdício com modinha e assinatura parada.</p>
+            </article>
+            <article class="glass-card">
+              <div class="tag">Powerful</div>
+              <h3><span class="spark">✦</span> Acompanhamento contínuo</h3>
+              <p>Ajuste de rota com orientação estratégica conforme a empresa e as demandas evoluem.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3: PROOF -->
+      <section class="panel" data-panel="3" aria-label="Prova social" id="prova">
+        <div class="panel-inner">
+          <div class="testimonial">
+            <div class="photo-card">
+              <img src="images/emiliano.jpg" alt="Emiliano Louzada" width="480" height="480" />
+            </div>
+            <div class="quote-card">
+              <blockquote>
+                « Eu vivo a realidade de quem lidera empresa: muito esforço, pouca clareza tecnológica. O hub existe para transformar IA em rotina e resultado, sem enrolação. »
+              </blockquote>
+              <div class="metrics">
+                <div>
+                  <strong>R$&nbsp;49</strong>
+                  <span>Entrada (de R$&nbsp;548)</span>
+                </div>
+                <div>
+                  <strong>7 dias</strong>
+                  <span>Garantia para testar</span>
+                </div>
+                <div>
+                  <strong>360°</strong>
+                  <span>Protocolo de adoção</span>
+                </div>
+              </div>
+              <cite>
+                Emiliano Louzada
+                <small>Louzada Digital Hub · Consultoria em IA e tecnologia</small>
+              </cite>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4: BENEFITS 4 cards -->
+      <section class="panel" data-panel="4" aria-label="Benefícios" id="beneficios">
+        <div class="panel-inner">
+          <div class="quad">
+            <article class="feature-card">
+              <div class="feature-icon light" aria-hidden="true">
+                <svg class="is-fill" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+              </div>
+              <div>
+                <h3>Mais clareza no que fazer primeiro</h3>
+                <p>Você para de dispersar energia e identifica onde a tecnologia gera impacto real.</p>
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon light" aria-hidden="true">
+                <svg class="is-fill" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+              </div>
+              <div>
+                <h3>Menos apagar incêndio</h3>
+                <p>A operação deixa de parecer caos permanente e ganha previsibilidade.</p>
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon light" aria-hidden="true">
+                <svg class="is-fill" viewBox="0 0 24 24"><path d="M12 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm0 1.5c-3.2 0-7 1.5-7 4.25V20h14v-2.25c0-2.75-3.8-4.25-7-4.25z"/></svg>
+              </div>
+              <div>
+                <h3>Equipe usando IA de verdade</h3>
+                <p>Processos leves, menos retrabalho e ferramentas que entram na rotina.</p>
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon light" aria-hidden="true">
+                <svg class="is-fill" viewBox="0 0 24 24"><path d="M12 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm0 1.5c-3.2 0-7 1.5-7 4.25V20h14v-2.25c0-2.75-3.8-4.25-7-4.25z"/></svg>
+              </div>
+              <div>
+                <h3>Decisão com segurança</h3>
+                <p>Você deixa de comprar no impulso e escolhe tecnologia com critério de dono.</p>
+              </div>
+            </article>
+          </div>
+          <div style="text-align:center;margin-top:1rem;flex-shrink:0;">
+            <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20no%20Louzada%20Digital%20Hub">
+              Entrar no hub
+              <span class="cta-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
-
-    <div class="nav-mobile" id="menu-mobile" data-nav-mobile hidden>
-      <nav aria-label="Menu mobile">
-        <a href="#mecanismo">Protocolo</a>
-        <a href="#como-funciona">Como funciona</a>
-        <a href="#preco">Investimento</a>
-        <a href="#faq">FAQ</a>
-        <a class="btn btn-primary" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20no%20Louzada%20Digital%20Hub">
-          Entrar agora
-        </a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="conteudo">
-    <!-- HERO (CodeForge-style centered) -->
-    <section class="hero" id="topo">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="shell hero-inner">
-        <p class="pill">
-          <span class="pill-dot" aria-hidden="true"></span>
-          Clube de IA e tecnologia com consultoria real
-        </p>
-        <h1>Sua empresa ainda decide na intuição. A concorrência já usa <span class="text-accent">IA</span> para vender e operar melhor.</h1>
-        <p class="hero-sub">Em poucos encontros, você sai com clareza, diagnóstico e um plano prático para aplicar tecnologia de verdade no seu negócio.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20destravar%20minha%20empresa">
-            Quero destravar minha empresa agora
-          </a>
-        </div>
-        <p class="hero-proof">Já ajudou empresas a saírem da bagunça operacional e colocarem IA no dia a dia com mais clareza e menos tentativa e erro.</p>
-      </div>
-
-      <!-- Feature tabs strip -->
-      <div class="shell">
-        <div class="feature-tabs" role="tablist" aria-label="Pilares do hub" data-tabs>
-          <button type="button" class="feature-tab is-active" role="tab" aria-selected="true" data-tab="0">Diagnóstico</button>
-          <button type="button" class="feature-tab" role="tab" aria-selected="false" data-tab="1">Prioridade</button>
-          <button type="button" class="feature-tab" role="tab" aria-selected="false" data-tab="2">Adoção de IA</button>
-          <button type="button" class="feature-tab" role="tab" aria-selected="false" data-tab="3">Acompanhamento</button>
-          <span class="feature-tabs-progress" data-tab-progress aria-hidden="true"></span>
-        </div>
-
-        <div class="feature-panel card-surface" data-tab-panels>
-          <div class="feature-panel-item is-active" data-panel="0">
-            <div class="feature-panel-copy">
-              <h2>Diagnóstico focado no gargalo</h2>
-              <p>Identifica o que mais consome tempo e dinheiro antes de comprar ferramenta. Clareza primeiro, sistema depois.</p>
-            </div>
-            <div class="mock mock-terminal" aria-hidden="true">
-              <div class="mock-dots"><span></span><span></span><span></span></div>
-              <pre><code><span class="c-muted">$</span> hub diagnose --empresa
-<span class="c-ok">✓</span> Mapeando rotina comercial...
-<span class="c-ok">✓</span> Atendimento e gargalos...
-<span class="c-accent">→</span> Prioridade: follow-up manual
-<span class="c-muted">  impacto estimado: alto</span></code></pre>
-            </div>
-          </div>
-          <div class="feature-panel-item" data-panel="1" hidden>
-            <div class="feature-panel-copy">
-              <h2>Prioridade de implementação</h2>
-              <p>Define o que fazer primeiro para gerar ganho rápido sem bagunçar a operação inteira de uma vez.</p>
-            </div>
-            <div class="mock mock-list" aria-hidden="true">
-              <div class="mock-row is-on"><span>1</span> Automatizar follow-up de vendas</div>
-              <div class="mock-row"><span>2</span> Padronizar atendimento com IA</div>
-              <div class="mock-row"><span>3</span> Relatórios semanais automáticos</div>
-              <div class="mock-row muted"><span>4</span> Depois: integrações avançadas</div>
-            </div>
-          </div>
-          <div class="feature-panel-item" data-panel="2" hidden>
-            <div class="feature-panel-copy">
-              <h2>Adoção real pela equipe</h2>
-              <p>Orientação para a IA entrar na rotina, não virar assinatura parada. Uso prático em vendas, atendimento e gestão.</p>
-            </div>
-            <div class="mock mock-chips" aria-hidden="true">
-              <span class="chip">Vendas</span>
-              <span class="chip">Atendimento</span>
-              <span class="chip is-accent">Gestão</span>
-              <span class="chip">Produtividade</span>
-              <p class="mock-note">Prompts e rotinas prontas para o time usar amanhã.</p>
-            </div>
-          </div>
-          <div class="feature-panel-item" data-panel="3" hidden>
-            <div class="feature-panel-copy">
-              <h2>Acompanhamento contínuo</h2>
-              <p>Reunião de direcionamento e comunidade para ajustar a rota conforme a empresa evolui.</p>
-            </div>
-            <div class="mock mock-cal" aria-hidden="true">
-              <div class="mock-cal-head">Direcionamento mensal</div>
-              <div class="mock-cal-body">
-                <strong>Prioridades do mês</strong>
-                <ul>
-                  <li>Revisar automação do atendimento</li>
-                  <li>Treinar equipe no novo fluxo</li>
-                  <li>Medir tempo economizado</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTEXT -->
-    <section class="section band" id="contexto">
-      <div class="shell narrow">
-        <p class="lede center">Você já percebeu que sua empresa trava não por falta de esforço, mas por falta de direção tecnológica. No Louzada Digital Hub, você entra num ambiente de consultoria, treinamento e troca estratégica para parar de apagar incêndio e usar tecnologia para ganhar tempo, reduzir erro e vender com mais inteligência.</p>
-      </div>
-    </section>
-
-    <!-- PROMESSA -->
-    <section class="section" id="promessa">
-      <div class="shell">
-        <div class="section-head center">
-          <span class="pill pill-soft">Promessa</span>
-          <h2>Isso funciona mesmo que...</h2>
-        </div>
-        <ul class="check-grid">
-          <li>você tenha uma empresa pequena e acha que IA é coisa de negócio grande</li>
-          <li>sua equipe não saiba por onde começar</li>
-          <li>você já tenha testado ferramentas e ninguém tenha adotado</li>
-          <li>você esteja cansado de solução bonita que não entra na rotina</li>
-          <li>você precise de clareza antes de sair comprando sistema e automação</li>
-          <li>você não tenha tempo para ficar estudando tecnologia por conta própria</li>
-          <li>você queira aplicar IA sem transformar sua operação numa bagunça maior</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- MECANISMO split -->
-    <section class="section band-soft" id="mecanismo">
-      <div class="shell split">
-        <div class="split-sticky">
-          <span class="pill pill-soft">Protocolo</span>
-          <h2>Protocolo de Adoção Inteligente <span class="text-accent">360</span></h2>
-          <p class="lede">A maioria das empresas erra porque compra ferramenta antes de entender o gargalo. Aqui o foco é diagnosticar, priorizar e aplicar.</p>
-          <p class="muted">Enquanto outros vendem ferramenta solta, nós entregamos direção, adoção e aplicação real no negócio.</p>
-        </div>
-        <div class="split-stack">
-          <article class="card-surface card-pad">
-            <h3>Diagnóstico focado</h3>
-            <p>No gargalo que mais consome tempo e dinheiro.</p>
-          </article>
-          <article class="card-surface card-pad">
-            <h3>Adoção pela equipe</h3>
-            <p>Orientação prática para uso real, não só compra de sistema.</p>
-          </article>
-          <article class="card-surface card-pad">
-            <h3>Curadoria de tecnologia</h3>
-            <p>Para evitar desperdício com modinha e ferramenta errada.</p>
-          </article>
-          <article class="card-surface card-pad">
-            <h3>Acompanhamento contínuo</h3>
-            <p>Ajuste da execução na vida real, conforme a empresa evolui.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- PÚBLICO -->
-    <section class="section" id="publico">
-      <div class="shell grid-2">
-        <div class="card-surface card-pad">
-          <h2>Para quem é</h2>
-          <ul class="plain-list">
-            <li>Dono de empresa que quer parar de decidir tudo no feeling.</li>
-            <li>Gestor cansado de processo manual travando a operação.</li>
-            <li>Empreendedor que quer usar IA para vender, atender e organizar melhor.</li>
-            <li>Empresa que já ouviu falar de automação, mas não sabe por onde começar.</li>
-            <li>Negócio que precisa de tecnologia aplicada, não de teoria bonita.</li>
-            <li>Quem lidera equipe e quer eficiência sem aumentar a confusão.</li>
-          </ul>
-        </div>
-        <div class="card-surface card-pad card-muted">
-          <h2>Para quem não é</h2>
-          <ul class="plain-list muted-list">
-            <li>Quem quer fórmula mágica sem mexer na rotina da empresa.</li>
-            <li>Quem procura só conteúdo motivacional sem aplicação prática.</li>
-            <li>Quem não quer investir nenhum esforço em implementação.</li>
-            <li>Quem acha que tecnologia resolve tudo sozinha, sem processo.</li>
-          </ul>
-        </div>
-      </div>
-      <p class="section-closer shell">Se você se identificou, você está pronto para organizar sua empresa com IA e tecnologia de verdade.</p>
-    </section>
-
-    <!-- COMO FUNCIONA -->
-    <section class="section band" id="como-funciona">
-      <div class="shell">
-        <div class="section-head center">
-          <span class="pill pill-soft">Como funciona</span>
-          <h2>Diagnóstico. Prioridade. <span class="text-accent">Aplicação.</span></h2>
-          <p class="lede center">Um caminho claro: do cenário atual à comunidade. Sem atalho mágico, com sequência que gera resultado.</p>
-        </div>
-        <ol class="steps-grid">
-          <li>
-            <strong>Diagnóstico do cenário atual</strong>
-            <span>Identifica os gargalos que mais travam a operação e consomem tempo.</span>
-          </li>
-          <li>
-            <strong>Prioridade de implementação</strong>
-            <span>Define o que fazer primeiro para gerar ganho rápido sem bagunçar tudo.</span>
-          </li>
-          <li>
-            <strong>Aplicação de IA no dia a dia</strong>
-            <span>Mostra onde usar IA em atendimento, vendas, gestão e produtividade.</span>
-          </li>
-          <li>
-            <strong>Curadoria de ferramentas</strong>
-            <span>Filtra soluções úteis para você não cair em modinhas e compras erradas.</span>
-          </li>
-          <li>
-            <strong>Ajuste com acompanhamento</strong>
-            <span>Corrige a rota conforme a empresa evolui e as demandas mudam.</span>
-          </li>
-          <li>
-            <strong>Comunidade e troca estratégica</strong>
-            <span>Você aprende com outros membros e acelera a tomada de decisão.</span>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- BENEFÍCIOS -->
-    <section class="section" id="beneficios">
-      <div class="shell">
-        <div class="section-head center">
-          <h2>O que muda na prática</h2>
-        </div>
-        <div class="bento">
-          <article class="card-surface card-pad">
-            <h3>Mais clareza no que fazer primeiro</h3>
-            <p>Você para de dispersar energia e identifica onde a tecnologia gera impacto real.</p>
-          </article>
-          <article class="card-surface card-pad">
-            <h3>Menos apagar incêndio</h3>
-            <p>A empresa deixa de parecer um caos permanente e ganha previsibilidade.</p>
-          </article>
-          <article class="card-surface card-pad">
-            <h3>Adoção da IA pela equipe</h3>
-            <p>Nada de ferramenta esquecida. Uso real no dia a dia.</p>
-          </article>
-          <article class="card-surface card-pad">
-            <h3>Processos mais leves</h3>
-            <p>Menos retrabalho, menos tarefas repetitivas, mais espaço para crescer.</p>
-          </article>
-          <article class="card-surface card-pad">
-            <h3>Decisão com segurança</h3>
-            <p>Você deixa de comprar tecnologia no impulso e escolhe com critério.</p>
-          </article>
-          <article class="card-surface card-pad card-accent">
-            <h3>Visão de dono estrategista</h3>
-            <p>Você deixa de ser refém da operação e passa a dirigir com inteligência.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROVA SOCIAL marquee -->
-    <section class="section band-soft" id="prova">
-      <div class="shell section-head center">
-        <span class="pill pill-soft">Prova social</span>
-        <h2>Quem já colocou <span class="text-accent">direção</span> no negócio</h2>
-      </div>
-      <div class="marquee" data-marquee>
-        <div class="marquee-track">
-          <blockquote class="quote-card">
-            <p>“Eu vivia comprando ferramenta e nada entrava na rotina. Aqui eu entendi o que precisava automatizar primeiro.”</p>
-            <footer><strong>Marcos T.</strong><span>Dono de empresa de serviços</span></footer>
-          </blockquote>
-          <blockquote class="quote-card">
-            <p>“A equipe começou a usar IA sem resistência porque o caminho veio mastigado.”</p>
-            <footer><strong>Juliana R.</strong><span>Gestora comercial</span></footer>
-          </blockquote>
-          <blockquote class="quote-card">
-            <p>“Parecia tudo confuso. Depois do diagnóstico, ficou óbvio onde estava vazando dinheiro.”</p>
-            <footer><strong>Rafael P.</strong><span>Empreendedor do varejo</span></footer>
-          </blockquote>
-          <blockquote class="quote-card">
-            <p>“Eu precisava de direção, não de mais um curso jogado. O hub me deu isso.”</p>
-            <footer><strong>Fernanda S.</strong><span>Sócia de pequena empresa</span></footer>
-          </blockquote>
-          <!-- duplicate for seamless loop -->
-          <blockquote class="quote-card" aria-hidden="true">
-            <p>“Eu vivia comprando ferramenta e nada entrava na rotina. Aqui eu entendi o que precisava automatizar primeiro.”</p>
-            <footer><strong>Marcos T.</strong><span>Dono de empresa de serviços</span></footer>
-          </blockquote>
-          <blockquote class="quote-card" aria-hidden="true">
-            <p>“A equipe começou a usar IA sem resistência porque o caminho veio mastigado.”</p>
-            <footer><strong>Juliana R.</strong><span>Gestora comercial</span></footer>
-          </blockquote>
-          <blockquote class="quote-card" aria-hidden="true">
-            <p>“Parecia tudo confuso. Depois do diagnóstico, ficou óbvio onde estava vazando dinheiro.”</p>
-            <footer><strong>Rafael P.</strong><span>Empreendedor do varejo</span></footer>
-          </blockquote>
-          <blockquote class="quote-card" aria-hidden="true">
-            <p>“Eu precisava de direção, não de mais um curso jogado. O hub me deu isso.”</p>
-            <footer><strong>Fernanda S.</strong><span>Sócia de pequena empresa</span></footer>
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <!-- PREÇO -->
-    <section class="section" id="preco">
-      <div class="shell pricing-layout">
-        <div class="pricing-intro">
-          <span class="pill pill-soft">Investimento</span>
-          <h2>Direção, suporte e atalhos por menos que um lanche por semana.</h2>
-          <p class="lede">Você investe R$ 49,00 e recebe o caminho prático para aplicar IA e tecnologia no negócio.</p>
-          <p class="scarcity">As vagas de acompanhamento e entrada na comunidade são limitadas para manter a qualidade do suporte.</p>
-        </div>
-
-        <div class="pricing-card card-surface">
-          <div class="pricing-badge">Oferta de entrada</div>
-          <div class="price-row">
-            <span class="price-old">R$ 548,00</span>
-            <span class="price-now">R$ 49,00</span>
-          </div>
-          <p class="price-installment">ou 12x de R$ 4,08</p>
-
-          <ul class="offer-stack">
-            <li>
-              <div>
-                <strong>Diagnóstico de Gargalos com IA</strong>
-                <span>Onde a empresa perde tempo e dinheiro.</span>
-              </div>
-              <em>R$ 97</em>
-            </li>
-            <li>
-              <div>
-                <strong>Mapa de Automação Prioritária</strong>
-                <span>O que automatizar primeiro.</span>
-              </div>
-              <em>R$ 147</em>
-            </li>
-            <li>
-              <div>
-                <strong>Biblioteca de Prompts para Negócio</strong>
-                <span>Modelos para vendas, atendimento e gestão.</span>
-              </div>
-              <em>R$ 97</em>
-            </li>
-            <li>
-              <div>
-                <strong>Reunião Mensal de Direcionamento</strong>
-                <span>Orientação para aplicar de verdade.</span>
-              </div>
-              <em>R$ 197</em>
-            </li>
-          </ul>
-
-          <a class="btn btn-primary btn-lg btn-block" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20agora%20no%20Louzada%20Digital%20Hub">
-            Entrar agora e começar a evoluir
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- GARANTIA -->
-    <section class="section band" id="garantia">
-      <div class="shell narrow center">
-        <h2>Garantia de 7 dias</h2>
-        <p class="lede center">Se em 7 dias você não enxergar mais clareza sobre como aplicar IA e tecnologia no seu negócio, devolvemos seu pagamento.</p>
-        <p class="muted">Sem enrolação e sem moda passageira. Tecnologia virando resultado real.</p>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section" id="faq">
-      <div class="shell faq-layout">
-        <div class="faq-intro">
-          <h2>Perguntas frequentes</h2>
-          <p class="lede">Respostas diretas sobre o hub. Se faltar algo, escreva para o e-mail de contato.</p>
-        </div>
-        <div class="faq-list">
-          <details open>
-            <summary>Isso serve para empresa pequena ou só para negócio grande?</summary>
-            <p>Serve para os dois. O foco não é tamanho: é resolver gargalo real com tecnologia aplicável no seu cenário.</p>
-          </details>
-          <details>
-            <summary>Eu não tenho equipe técnica. Mesmo assim faz sentido?</summary>
-            <p>Faz. A proposta traduz IA e tecnologia para a sua realidade, sem depender de time interno especializado.</p>
-          </details>
-          <details>
-            <summary>Eu já tentei implantar ferramenta e ninguém usou. Aqui é diferente?</summary>
-            <p>Sim. Consideramos adoção, rotina e aplicação prática, para a tecnologia não virar mais uma assinatura parada.</p>
-          </details>
-          <details>
-            <summary>Isso é curso gravado ou consultoria de verdade?</summary>
-            <p>É uma comunidade/assinatura com suporte estratégico, troca e direcionamento para evoluir com consistência.</p>
-          </details>
-          <details>
-            <summary>Consigo aplicar mesmo sem saber por onde começar?</summary>
-            <p>Consegue. Você entra com o problema e sai com priorização: o que fazer primeiro, o que ignorar e o que automatizar.</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA final -->
-    <section class="cta-final" id="fechar">
-      <div class="cta-glow" aria-hidden="true"></div>
-      <div class="shell narrow center">
-        <h2>Você tem 2 caminhos</h2>
-        <p class="lede center">Continuar apagando incêndio, ou entrar num ambiente que te ajuda a usar IA para crescer com mais controle.</p>
-        <p class="close-punch">Chega de decidir no escuro. Coloque inteligência no seu negócio.</p>
-        <a class="btn btn-primary btn-lg" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20no%20Louzada%20Digital%20Hub">
-          Quero entrar no Louzada Digital Hub
-        </a>
-        <p class="close-mail">
-          Contato:
-          <a href="mailto:contato@louzadadigitalhub.com">contato@louzadadigitalhub.com</a>
-        </p>
-      </div>
-    </section>
-  </main>
+  </div>
 
   <footer class="site-footer">
-    <div class="shell footer-grid">
+    <div class="footer-inner">
       <div>
-        <a class="brand" href="#topo" aria-label="Louzada Digital Hub">
-          <img src="images/mark-light.png" alt="" width="40" height="34" class="brand-mark" />
-          <span class="brand-text">Louzada <em>Digital Hub</em></span>
+        <a class="brand" href="/" style="margin-bottom:.5rem;display:inline-flex;">
+          <img src="images/mark.png" alt="" width="36" height="30" />
+          <span>Louzada<em>Digital Hub</em></span>
         </a>
-        <p class="footer-copy">Consultoria em IA e tecnologia para empresas que querem clareza, priorização e adoção real.</p>
+        <p>Consultoria em IA e tecnologia para empresas que querem clareza, priorização e adoção real.</p>
+        <p class="footer-legal">CNPJ 67.866.195/0001-28</p>
       </div>
       <div>
-        <h3 class="footer-title">Navegação</h3>
-        <a href="#mecanismo">Protocolo</a>
-        <a href="#como-funciona">Como funciona</a>
-        <a href="#preco">Investimento</a>
-        <a href="#faq">FAQ</a>
+        <h3>Contato</h3>
+        <p><a href="mailto:contato@louzadadigitalhub.com">contato@louzadadigitalhub.com</a></p>
+        <p><a href="tel:+5553991836803">(53) 99183-6803</a></p>
+        <p>Emiliano Louzada</p>
       </div>
       <div>
-        <h3 class="footer-title">Contato</h3>
-        <a href="mailto:contato@louzadadigitalhub.com">contato@louzadadigitalhub.com</a>
+        <h3>Atalhos</h3>
+        <p><a href="oferta.html">Ver oferta completa</a></p>
+        <p><a href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20no%20hub">Entrar no hub</a></p>
+        <p><a href="tel:+5553991836803">Ligar agora</a></p>
       </div>
-    </div>
-    <div class="shell footer-bottom">
-      <p>&copy; <span data-year></span> Louzada Digital Hub. Todos os direitos reservados.</p>
     </div>
   </footer>
 
-  <script src="main.js" defer></script>
+  <script>
+    (function () {
+      var FRAME_COUNT = 357;
+      var PX_PER_FRAME = 14;
+      var LERP = 0.22;
+      var SECTION_COUNT = 5;
+
+      /* Faixas de progresso 0–1 para cada painel (com sobreposição suave) */
+      var RANGES = [
+        [0.00, 0.18],
+        [0.16, 0.36],
+        [0.34, 0.56],
+        [0.54, 0.76],
+        [0.74, 1.00]
+      ];
+
+      var track = document.getElementById("track");
+      var stage = document.getElementById("stage");
+      var canvas = document.getElementById("sequence");
+      var scrim = document.getElementById("scrim");
+      var panels = Array.prototype.slice.call(document.querySelectorAll("[data-panel]"));
+      var ctx = canvas.getContext("2d", { alpha: false });
+
+      var images = new Array(FRAME_COUNT);
+      var target = 0;
+      var current = 0;
+      var lastDrawn = -1;
+      var ticking = false;
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function setTrackHeight() {
+        var stageH = Math.min(900, window.innerHeight);
+        var run = (FRAME_COUNT - 1) * PX_PER_FRAME;
+        track.style.height = (stageH + run) + "px";
+      }
+
+      function frameUrl(i) {
+        var n = i + 1;
+        var s = String(n);
+        while (s.length < 4) s = "0" + s;
+        return "frames/frame-" + s + ".jpg";
+      }
+
+      function resizeCanvas() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var rect = stage.getBoundingClientRect();
+        var w = Math.max(1, Math.floor(rect.width * dpr));
+        var h = Math.max(1, Math.floor(rect.height * dpr));
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+          lastDrawn = -1;
+        }
+      }
+
+      function draw(index) {
+        var img = images[index];
+        if (!img || !img.naturalWidth) return;
+        var cw = canvas.width, ch = canvas.height;
+        var iw = img.naturalWidth, ih = img.naturalHeight;
+        var scale = Math.max(cw / iw, ch / ih);
+        var dw = iw * scale, dh = ih * scale;
+        var dx = (cw - dw) * 0.5, dy = (ch - dh) * 0.5;
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.drawImage(img, dx, dy, dw, dh);
+        lastDrawn = index;
+      }
+
+      function nearestLoaded(index) {
+        if (images[index] && images[index].naturalWidth) return index;
+        var i;
+        for (i = 1; i < FRAME_COUNT; i++) {
+          if (index - i >= 0 && images[index - i] && images[index - i].naturalWidth) return index - i;
+          if (index + i < FRAME_COUNT && images[index + i] && images[index + i].naturalWidth) return index + i;
+        }
+        return -1;
+      }
+
+      function maxScroll() {
+        return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      }
+
+      function progress() {
+        var p = window.pageYOffset / maxScroll();
+        if (p < 0) p = 0;
+        if (p > 1) p = 1;
+        return p;
+      }
+
+      function sectionWeight(p, start, end) {
+        var mid = (start + end) * 0.5;
+        var half = (end - start) * 0.5;
+        if (half <= 0) return 0;
+        var d = Math.abs(p - mid) / half;
+        if (d >= 1) return 0;
+        return 1 - d;
+      }
+
+      function updatePanels(p) {
+        var best = 0;
+        var bestW = -1;
+        var i, w;
+        for (i = 0; i < RANGES.length; i++) {
+          w = sectionWeight(p, RANGES[i][0], RANGES[i][1]);
+          if (w > bestW) {
+            bestW = w;
+            best = i;
+          }
+        }
+        for (i = 0; i < panels.length; i++) {
+          if (i === best) panels[i].classList.add("is-active");
+          else panels[i].classList.remove("is-active");
+        }
+        /* scrim um pouco mais leve nas seções de prova/benefícios */
+        if (scrim) {
+          scrim.style.opacity = best >= 3 ? "0.85" : "1";
+        }
+      }
+
+      function readTarget() {
+        var p = progress();
+        target = p * (FRAME_COUNT - 1);
+        updatePanels(p);
+      }
+
+      function loop() {
+        ticking = false;
+        if (reduce) {
+          current = target;
+        } else {
+          var d = target - current;
+          if (Math.abs(d) < 0.002) current = target;
+          else current += d * LERP;
+        }
+        var idx = Math.round(current);
+        if (idx < 0) idx = 0;
+        if (idx > FRAME_COUNT - 1) idx = FRAME_COUNT - 1;
+        var use = nearestLoaded(idx);
+        if (use >= 0 && use !== lastDrawn) draw(use);
+        if (!reduce && Math.abs(target - current) > 0.002) {
+          ticking = true;
+          requestAnimationFrame(loop);
+        }
+      }
+
+      function requestLoop() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(loop);
+        }
+      }
+
+      function onScroll() {
+        readTarget();
+        requestLoop();
+      }
+
+      function preload() {
+        var i = 0;
+        var concurrent = 18;
+        function kick() {
+          if (i >= FRAME_COUNT) return;
+          var index = i++;
+          var img = new Image();
+          img.decoding = "async";
+          img.onload = function () {
+            images[index] = img;
+            if (index === 0) {
+              resizeCanvas();
+              draw(0);
+            }
+            if (nearestLoaded(Math.round(current)) === index) {
+              lastDrawn = -1;
+              requestLoop();
+            }
+            kick();
+          };
+          img.onerror = function () { kick(); };
+          img.src = frameUrl(index);
+        }
+        for (var s = 0; s < concurrent; s++) kick();
+      }
+
+      /* Jump links */
+      document.querySelectorAll("[data-jump]").forEach(function (el) {
+        el.addEventListener("click", function (e) {
+          e.preventDefault();
+          var idx = parseInt(el.getAttribute("data-jump"), 10) || 0;
+          var mid = (RANGES[idx][0] + RANGES[idx][1]) * 0.5;
+          var y = mid * maxScroll();
+          window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
+        });
+      });
+
+      setTrackHeight();
+      resizeCanvas();
+
+      window.addEventListener("resize", function () {
+        setTrackHeight();
+        resizeCanvas();
+        readTarget();
+        requestLoop();
+      }, { passive: true });
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("wheel", onScroll, { passive: true });
+      window.addEventListener("touchmove", onScroll, { passive: true });
+
+      var first = new Image();
+      first.onload = function () {
+        images[0] = first;
+        resizeCanvas();
+        draw(0);
+      };
+      first.src = frameUrl(0);
+
+      preload();
+      readTarget();
+      requestLoop();
+    })();
+  </script>
 </body>
 </html>
