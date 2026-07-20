@@ -4,9 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Louzada Digital Hub: clube de IA e tecnologia com consultoria, diagnóstico e plano prático para empresas." />
+  <meta name="description" content="Louzada Digital Hub: clube de IA e tecnologia com consultoria, diagnóstico e plano prático para empresas. Solicite um orçamento." />
   <title>Louzada Digital Hub | IA e tecnologia com clareza</title>
-  <link rel="icon" href="images/monogram.png" type="image/png" />
+  <link rel="icon" href="images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Louzada Digital Hub" />
+  <meta property="og:title" content="Louzada Digital Hub | Consultoria em IA e tecnologia" />
+  <meta property="og:description" content="Clube de IA e tecnologia com diagnóstico, priorização e adoção real. Solicite um orçamento com Emiliano Louzada." />
+  <meta property="og:image" content="https://louzada-digital-hub.vercel.app/images/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://louzada-digital-hub.vercel.app/" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Louzada Digital Hub | Consultoria em IA e tecnologia" />
+  <meta name="twitter:description" content="Clareza, diagnóstico e plano prático de IA para sua empresa. Solicite um orçamento." />
+  <meta name="twitter:image" content="https://louzada-digital-hub.vercel.app/images/og-image.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
@@ -727,22 +744,196 @@
       opacity: .65;
     }
 
-    @media (max-width: 640px) {
-      .hero h1 {
-        font-size: clamp(1.7rem, 6.5vw, 2.35rem);
+    /* ===== Mobile ===== */
+    @media (max-width: 900px) {
+      .stage {
+        height: 100dvh;
+        height: 100vh;
       }
-      .feature-card { max-width: 100%; }
+
+      .panel {
+        padding: .75rem 0 max(.85rem, env(safe-area-inset-bottom));
+      }
+
+      .panel-inner {
+        width: min(100% - 1.25rem, 68rem);
+      }
+
+      .topbar {
+        grid-template-columns: auto 1fr auto;
+        gap: .5rem;
+        min-height: 2.5rem;
+      }
+
+      .brand span { display: none; }
+      .brand img { height: 2rem; }
+
+      .nav-pills {
+        display: none;
+      }
+
       .menu-btn span.label { display: none; }
       .menu-btn {
         padding: .3rem;
-        width: 2.35rem;
-        height: 2.35rem;
+        width: 2.5rem;
+        height: 2.5rem;
         border-radius: 50%;
         justify-content: center;
       }
-      .menu-btn .dots { width: 100%; height: 100%; }
-      .panel-inner { width: min(100% - 1.25rem, 68rem); }
-      .metrics { grid-template-columns: 1fr; }
+      .menu-btn .dots {
+        width: 100%;
+        height: 100%;
+        font-size: .85rem;
+      }
+
+      .hero {
+        padding: .25rem 0;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.55rem, 6.2vw, 2rem);
+        max-width: 16ch;
+        line-height: 1.15;
+      }
+
+      .hero .lede {
+        margin-top: 10px;
+        font-size: 13.5px;
+        max-width: 30ch;
+        line-height: 1.45;
+      }
+
+      .cta {
+        margin-top: 12px;
+        min-height: 2.45rem;
+        font-size: .8125rem;
+        padding: .35rem .35rem .35rem 1rem;
+      }
+
+      .cta-icon {
+        width: 1.7rem;
+        height: 1.7rem;
+      }
+
+      .features-row {
+        gap: .55rem;
+        width: 100%;
+      }
+
+      .feature-card {
+        max-width: 100%;
+        padding: .7rem .8rem;
+        gap: .55rem;
+      }
+
+      .feature-card h2,
+      .feature-card h3 {
+        font-size: .84rem;
+      }
+
+      .feature-card p {
+        font-size: .74rem;
+        line-height: 1.35;
+      }
+
+      .feature-icon {
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+
+      .section-center h2 {
+        font-size: clamp(1.4rem, 5.5vw, 1.85rem);
+        max-width: 16ch;
+      }
+
+      .section-center .lede {
+        font-size: .875rem;
+        margin-top: .7rem;
+      }
+
+      .logo-strip {
+        gap: .75rem 1.1rem;
+        margin-top: 1.25rem;
+      }
+
+      .logo-chip {
+        font-size: .68rem;
+      }
+
+      .float-grid {
+        gap: .55rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: .25rem;
+      }
+
+      .glass-card {
+        padding: .85rem .9rem;
+      }
+
+      .glass-card h3 {
+        font-size: .95rem;
+      }
+
+      .glass-card p {
+        font-size: .8rem;
+      }
+
+      .testimonial {
+        gap: .75rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .photo-card {
+        max-width: 140px;
+        aspect-ratio: 1;
+      }
+
+      .quote-card {
+        padding: 1rem 1.05rem;
+      }
+
+      .quote-card blockquote {
+        font-size: .8rem;
+        line-height: 1.35;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+        gap: .55rem;
+        margin-top: .9rem;
+        padding-top: .75rem;
+      }
+
+      .metrics strong {
+        font-size: 1.15rem;
+      }
+
+      .quad {
+        gap: .55rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .site-footer {
+        padding: 1.25rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+      }
+    }
+
+    @media (max-width: 380px) {
+      .hero h1 {
+        font-size: 1.4rem;
+      }
+      .features-row .feature-card p {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -783,8 +974,8 @@
             <p class="lede">
               Em poucos encontros, você sai com clareza, diagnóstico e um plano prático para aplicar tecnologia de verdade no seu negócio.
             </p>
-            <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20destravar%20minha%20empresa">
-              Destravar minha empresa
+            <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Solicitar%20orçamento%20-%20Louzada%20Digital%20Hub&body=Olá%20Emiliano,%0A%0AGostaria%20de%20solicitar%20um%20orçamento%20do%20Louzada%20Digital%20Hub.%0A%0AEmpresa:%0ANecessidade:%0ATelefone:">
+              Solicitar orçamento
               <span class="cta-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </span>
@@ -884,22 +1075,30 @@
               </blockquote>
               <div class="metrics">
                 <div>
-                  <strong>R$&nbsp;49</strong>
-                  <span>Entrada (de R$&nbsp;548)</span>
-                </div>
-                <div>
-                  <strong>7 dias</strong>
-                  <span>Garantia para testar</span>
-                </div>
-                <div>
                   <strong>360°</strong>
                   <span>Protocolo de adoção</span>
+                </div>
+                <div>
+                  <strong>1:1</strong>
+                  <span>Diagnóstico sob medida</span>
+                </div>
+                <div>
+                  <strong>Real</strong>
+                  <span>Aplicação na rotina</span>
                 </div>
               </div>
               <cite>
                 Emiliano Louzada
                 <small>Louzada Digital Hub · Consultoria em IA e tecnologia</small>
               </cite>
+              <p style="margin:1rem 0 0;">
+                <a class="cta" style="margin-top:0;" href="mailto:contato@louzadadigitalhub.com?subject=Solicitar%20orçamento%20-%20Louzada%20Digital%20Hub">
+                  Solicitar orçamento
+                  <span class="cta-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </p>
             </div>
           </div>
         </div>
@@ -947,8 +1146,8 @@
             </article>
           </div>
           <div style="text-align:center;margin-top:1rem;flex-shrink:0;">
-            <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20no%20Louzada%20Digital%20Hub">
-              Entrar no hub
+            <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Solicitar%20orçamento%20-%20Louzada%20Digital%20Hub">
+              Solicitar orçamento
               <span class="cta-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </span>
@@ -978,8 +1177,9 @@
       <div>
         <h3>Atalhos</h3>
         <p><a href="oferta.html">Ver oferta completa</a></p>
-        <p><a href="mailto:contato@louzadadigitalhub.com?subject=Quero%20entrar%20no%20hub">Entrar no hub</a></p>
+        <p><a href="mailto:contato@louzadadigitalhub.com?subject=Solicitar%20orçamento%20-%20Louzada%20Digital%20Hub">Solicitar orçamento</a></p>
         <p><a href="tel:+5553991836803">Ligar agora</a></p>
+        <p><a href="oferta.html">Saiba mais</a></p>
       </div>
     </div>
   </footer>
