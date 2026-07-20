@@ -1,0 +1,9 @@
+{
+  "name": "louzada-digital-hub",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Landing estática Louzada Digital Hub",
+  "scripts": {
+    "start": "python3 -m http.server 9123 --bind 127.0.0.1"
+  }
+}
