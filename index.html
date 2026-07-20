@@ -112,6 +112,112 @@
       transition: opacity .35s ease;
     }
 
+    /* Progress dots (mobile clarity) */
+    .progress {
+      position: absolute;
+      left: 50%;
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      gap: .4rem;
+      padding: .4rem .55rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .progress span {
+      width: .4rem;
+      height: .4rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,.35);
+      transition: transform .25s ease, background .25s ease, width .25s ease;
+    }
+
+    .progress span.is-on {
+      background: #fff;
+      width: .9rem;
+      border-radius: 999px;
+    }
+
+    .mobile-only { display: none !important; }
+
+    .mobile-steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      display: grid;
+      gap: .55rem;
+    }
+
+    .mobile-steps li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .65rem;
+      align-items: start;
+      padding: .85rem .95rem;
+      border-radius: .9rem;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.42);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .mobile-steps .n {
+      width: 1.55rem;
+      height: 1.55rem;
+      border-radius: 50%;
+      background: #fff;
+      color: #000;
+      font-size: .75rem;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .mobile-steps strong {
+      display: block;
+      font-size: .9rem;
+      font-weight: 600;
+      margin-bottom: .15rem;
+    }
+
+    .mobile-steps span {
+      display: block;
+      font-size: .78rem;
+      line-height: 1.4;
+      opacity: .88;
+    }
+
+    .section-label {
+      position: absolute;
+      top: max(.75rem, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(255,255,255,.12);
+      white-space: nowrap;
+    }
+
+    .section-label.is-on { opacity: .9; }
+
     /* ===== Panels (sections) over film ===== */
     .panel {
       position: absolute;
@@ -744,196 +850,212 @@
       opacity: .65;
     }
 
-    /* ===== Mobile ===== */
+    /* ===== Mobile: menos ruído, mais filme, uma ideia por vez ===== */
     @media (max-width: 900px) {
+      .desktop-only { display: none !important; }
+      .mobile-only { display: grid !important; }
+
       .stage {
         height: 100dvh;
         height: 100vh;
       }
 
+      /* Scrim mais leve: o fundo aparece e a UI não “tapa” a cena */
+      #scrim {
+        background:
+          linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.2) 28%, rgba(0,0,0,.25) 55%, rgba(0,0,0,.72) 100%);
+      }
+
       .panel {
-        padding: .75rem 0 max(.85rem, env(safe-area-inset-bottom));
+        padding:
+          max(3.25rem, calc(env(safe-area-inset-top) + 2.75rem))
+          0
+          max(3.5rem, calc(env(safe-area-inset-bottom) + 2.75rem));
+        transform: translateY(10px);
+      }
+
+      .panel.is-active {
+        transform: translateY(0);
       }
 
       .panel-inner {
-        width: min(100% - 1.25rem, 68rem);
+        width: min(100% - 1.5rem, 26rem);
+        justify-content: center;
+        gap: 1rem;
       }
 
+      /* Header limpo */
       .topbar {
-        grid-template-columns: auto 1fr auto;
-        gap: .5rem;
-        min-height: 2.5rem;
+        position: absolute;
+        top: max(.65rem, env(safe-area-inset-top));
+        left: .85rem;
+        right: .85rem;
+        width: auto;
+        min-height: 2.4rem;
+        z-index: 6;
+        pointer-events: none;
       }
+
+      .topbar a { pointer-events: auto; }
 
       .brand span { display: none; }
-      .brand img { height: 2rem; }
+      .brand img { height: 2.05rem; }
 
-      .nav-pills {
-        display: none;
-      }
+      .nav-pills { display: none !important; }
 
-      .menu-btn span.label { display: none; }
       .menu-btn {
-        padding: .3rem;
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 50%;
+        padding: 0;
         justify-content: center;
+        background: rgba(0,0,0,.45);
       }
+      .menu-btn span.label { display: none; }
       .menu-btn .dots {
         width: 100%;
         height: 100%;
-        font-size: .85rem;
+        font-size: .9rem;
       }
 
+      /* Hero: só mensagem + botão (sem cards embaixo) */
       .hero {
-        padding: .25rem 0;
-        justify-content: center;
+        flex: 0 1 auto;
+        padding: 0;
+        gap: 0;
       }
 
       .hero h1 {
-        font-size: clamp(1.55rem, 6.2vw, 2rem);
-        max-width: 16ch;
-        line-height: 1.15;
+        font-size: clamp(1.65rem, 7vw, 2.05rem);
+        max-width: 14ch;
+        line-height: 1.18;
+        letter-spacing: -.03em;
       }
 
       .hero .lede {
-        margin-top: 10px;
-        font-size: 13.5px;
-        max-width: 30ch;
+        margin-top: .7rem;
+        font-size: .9rem;
+        max-width: 28ch;
         line-height: 1.45;
+        opacity: .95;
       }
 
       .cta {
-        margin-top: 12px;
-        min-height: 2.45rem;
-        font-size: .8125rem;
-        padding: .35rem .35rem .35rem 1rem;
+        margin-top: 1rem;
+        min-height: 2.7rem;
+        font-size: .875rem;
+        padding: .45rem .45rem .45rem 1.15rem;
       }
 
       .cta-icon {
-        width: 1.7rem;
-        height: 1.7rem;
+        width: 1.85rem;
+        height: 1.85rem;
+        background: var(--accent);
       }
 
-      .features-row {
-        gap: .55rem;
-        width: 100%;
-      }
-
-      .feature-card {
-        max-width: 100%;
-        padding: .7rem .8rem;
-        gap: .55rem;
-      }
-
-      .feature-card h2,
-      .feature-card h3 {
-        font-size: .84rem;
-      }
-
-      .feature-card p {
-        font-size: .74rem;
-        line-height: 1.35;
-      }
-
-      .feature-icon {
-        width: 1.75rem;
-        height: 1.75rem;
+      .section-center {
+        justify-content: center;
+        gap: .35rem;
       }
 
       .section-center h2 {
-        font-size: clamp(1.4rem, 5.5vw, 1.85rem);
-        max-width: 16ch;
+        font-size: clamp(1.45rem, 6vw, 1.85rem);
+        max-width: 15ch;
       }
 
       .section-center .lede {
-        font-size: .875rem;
-        margin-top: .7rem;
+        font-size: .88rem;
+        margin-top: .65rem;
+        max-width: 30ch;
       }
 
       .logo-strip {
-        gap: .75rem 1.1rem;
-        margin-top: 1.25rem;
+        margin-top: 1.15rem;
+        gap: .55rem;
+        max-width: 20rem;
       }
 
       .logo-chip {
-        font-size: .68rem;
+        font-size: .7rem;
+        padding: .35rem .55rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,.14);
+        background: rgba(0,0,0,.35);
+        opacity: .9;
       }
 
-      .float-grid {
-        gap: .55rem;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: .25rem;
-      }
+      .logo-chip i { display: none; }
 
-      .glass-card {
-        padding: .85rem .9rem;
-      }
-
-      .glass-card h3 {
-        font-size: .95rem;
-      }
-
-      .glass-card p {
-        font-size: .8rem;
-      }
-
+      /* Prova: foto menor + texto legível, sem métricas empilhadas longas */
       .testimonial {
-        gap: .75rem;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        gap: .85rem;
+        justify-items: center;
+        text-align: center;
       }
 
       .photo-card {
-        max-width: 140px;
-        aspect-ratio: 1;
+        max-width: 112px;
+        border-radius: 1rem;
       }
 
       .quote-card {
         padding: 1rem 1.05rem;
+        text-align: left;
+        width: 100%;
       }
 
       .quote-card blockquote {
-        font-size: .8rem;
-        line-height: 1.35;
+        font-size: .86rem;
+        line-height: 1.4;
         text-transform: none;
         letter-spacing: 0;
+        font-weight: 500;
       }
 
       .metrics {
-        grid-template-columns: 1fr;
-        gap: .55rem;
-        margin-top: .9rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: .4rem;
+        margin-top: .85rem;
         padding-top: .75rem;
       }
 
       .metrics strong {
-        font-size: 1.15rem;
+        font-size: 1rem;
       }
 
-      .quad {
-        gap: .55rem;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+      .metrics span {
+        font-size: .65rem;
+        line-height: 1.25;
+      }
+
+      .quote-card .cta {
+        width: 100%;
+        justify-content: center;
       }
 
       .site-footer {
         padding: 1.25rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
       }
+
+      .progress {
+        display: flex;
+      }
+
+      .section-label {
+        display: block;
+      }
+    }
+
+    @media (min-width: 901px) {
+      .progress { display: none; }
+      .section-label { display: none; }
+      .mobile-only { display: none !important; }
     }
 
     @media (max-width: 380px) {
-      .hero h1 {
-        font-size: 1.4rem;
-      }
-      .features-row .feature-card p {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
+      .hero h1 { font-size: 1.45rem; }
+      .hero .lede { font-size: .84rem; }
+      .metrics { grid-template-columns: 1fr 1fr 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -947,9 +1069,13 @@
     <div class="stage" id="stage">
       <canvas id="sequence" width="1920" height="1080" aria-hidden="true"></canvas>
       <div id="scrim" aria-hidden="true"></div>
+      <div class="section-label" id="sectionLabel" aria-hidden="true">Início</div>
+      <div class="progress" id="progress" aria-hidden="true">
+        <span class="is-on"></span><span></span><span></span><span></span><span></span>
+      </div>
 
       <!-- 0: HERO -->
-      <section class="panel is-active" data-panel="0" aria-label="Início">
+      <section class="panel is-active" data-panel="0" data-label="Início" aria-label="Início">
         <div class="panel-inner">
           <header class="topbar">
             <a class="brand" href="/" aria-label="Louzada Digital Hub">
@@ -972,7 +1098,7 @@
           <div class="hero" id="inicio">
             <h1>Sua empresa ainda decide na intuição. A concorrência já usa IA.</h1>
             <p class="lede">
-              Em poucos encontros, você sai com clareza, diagnóstico e um plano prático para aplicar tecnologia de verdade no seu negócio.
+              Clareza, diagnóstico e plano prático para aplicar tecnologia de verdade no seu negócio.
             </p>
             <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Solicitar%20orçamento%20-%20Louzada%20Digital%20Hub&body=Olá%20Emiliano,%0A%0AGostaria%20de%20solicitar%20um%20orçamento%20do%20Louzada%20Digital%20Hub.%0A%0AEmpresa:%0ANecessidade:%0ATelefone:">
               Solicitar orçamento
@@ -982,7 +1108,8 @@
             </a>
           </div>
 
-          <div class="features-row">
+          <!-- Desktop only: cards no hero. No mobile a tela fica limpa. -->
+          <div class="features-row desktop-only">
             <article class="feature-card">
               <div class="feature-icon light" aria-hidden="true">
                 <svg class="is-fill" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
@@ -1006,7 +1133,7 @@
       </section>
 
       <!-- 1: TRUST -->
-      <section class="panel" data-panel="1" aria-label="Confiança" id="confianca">
+      <section class="panel" data-panel="1" data-label="Confiança" aria-label="Confiança" id="confianca">
         <div class="panel-inner">
           <div class="section-center">
             <p class="eyebrow">Louzada Digital Hub</p>
@@ -1025,10 +1152,11 @@
         </div>
       </section>
 
-      <!-- 2: PROTOCOL / ABOUT -->
-      <section class="panel" data-panel="2" aria-label="Protocolo" id="protocolo">
+      <!-- 2: PROTOCOL -->
+      <section class="panel" data-panel="2" data-label="Protocolo" aria-label="Protocolo" id="protocolo">
         <div class="panel-inner">
-          <div class="float-grid">
+          <!-- Desktop: 4 glass cards -->
+          <div class="float-grid desktop-only">
             <div class="span-full">
               <p class="eyebrow">✦ Protocolo 360</p>
               <h2 style="margin:0;font-size:clamp(1.5rem,1.1rem + 1.6vw,2.25rem);font-weight:500;letter-spacing:-.03em;line-height:1.2;color:#fff;text-wrap:balance;">
@@ -1059,11 +1187,47 @@
               <p>Ajuste de rota com orientação estratégica conforme a empresa e as demandas evoluem.</p>
             </article>
           </div>
+
+          <!-- Mobile: lista clara, 1 coluna -->
+          <div class="section-center mobile-only" style="width:100%;">
+            <p class="eyebrow">Protocolo 360</p>
+            <h2 style="margin:0 0 .85rem;font-size:1.55rem;font-weight:500;max-width:14ch;">Como o hub funciona</h2>
+            <ol class="mobile-steps">
+              <li>
+                <span class="n">1</span>
+                <div>
+                  <strong>Diagnóstico focado</strong>
+                  <span>Encontra o gargalo que mais consome tempo e dinheiro.</span>
+                </div>
+              </li>
+              <li>
+                <span class="n">2</span>
+                <div>
+                  <strong>Prioridade</strong>
+                  <span>Define o que fazer primeiro, sem bagunçar a operação.</span>
+                </div>
+              </li>
+              <li>
+                <span class="n">3</span>
+                <div>
+                  <strong>Curadoria</strong>
+                  <span>Escolhe ferramentas que servem ao seu cenário.</span>
+                </div>
+              </li>
+              <li>
+                <span class="n">4</span>
+                <div>
+                  <strong>Acompanhamento</strong>
+                  <span>Ajusta a rota na vida real da empresa.</span>
+                </div>
+              </li>
+            </ol>
+          </div>
         </div>
       </section>
 
       <!-- 3: PROOF -->
-      <section class="panel" data-panel="3" aria-label="Prova social" id="prova">
+      <section class="panel" data-panel="3" data-label="Prova" aria-label="Prova social" id="prova">
         <div class="panel-inner">
           <div class="testimonial">
             <div class="photo-card">
@@ -1071,20 +1235,20 @@
             </div>
             <div class="quote-card">
               <blockquote>
-                « Eu vivo a realidade de quem lidera empresa: muito esforço, pouca clareza tecnológica. O hub existe para transformar IA em rotina e resultado, sem enrolação. »
+                « O hub existe para transformar IA em rotina e resultado, sem enrolação. »
               </blockquote>
-              <div class="metrics">
+              <div class="metrics desktop-only">
                 <div>
                   <strong>360°</strong>
-                  <span>Protocolo de adoção</span>
+                  <span>Protocolo</span>
                 </div>
                 <div>
                   <strong>1:1</strong>
-                  <span>Diagnóstico sob medida</span>
+                  <span>Diagnóstico</span>
                 </div>
                 <div>
                   <strong>Real</strong>
-                  <span>Aplicação na rotina</span>
+                  <span>Na rotina</span>
                 </div>
               </div>
               <cite>
@@ -1104,10 +1268,10 @@
         </div>
       </section>
 
-      <!-- 4: BENEFITS 4 cards -->
-      <section class="panel" data-panel="4" aria-label="Benefícios" id="beneficios">
+      <!-- 4: BENEFITS -->
+      <section class="panel" data-panel="4" data-label="Benefícios" aria-label="Benefícios" id="beneficios">
         <div class="panel-inner">
-          <div class="quad">
+          <div class="quad desktop-only">
             <article class="feature-card">
               <div class="feature-icon light" aria-hidden="true">
                 <svg class="is-fill" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
@@ -1145,7 +1309,49 @@
               </div>
             </article>
           </div>
-          <div style="text-align:center;margin-top:1rem;flex-shrink:0;">
+
+          <div class="section-center mobile-only" style="width:100%;">
+            <p class="eyebrow">Resultados</p>
+            <h2 style="margin:0 0 .85rem;font-size:1.55rem;font-weight:500;max-width:14ch;">O que muda na prática</h2>
+            <ol class="mobile-steps">
+              <li>
+                <span class="n">1</span>
+                <div>
+                  <strong>Clareza no que fazer primeiro</strong>
+                  <span>Prioridade com impacto real, sem dispersar energia.</span>
+                </div>
+              </li>
+              <li>
+                <span class="n">2</span>
+                <div>
+                  <strong>Menos apagar incêndio</strong>
+                  <span>Operação com mais previsibilidade.</span>
+                </div>
+              </li>
+              <li>
+                <span class="n">3</span>
+                <div>
+                  <strong>Equipe usando IA</strong>
+                  <span>Ferramentas que entram na rotina de verdade.</span>
+                </div>
+              </li>
+              <li>
+                <span class="n">4</span>
+                <div>
+                  <strong>Decisão com segurança</strong>
+                  <span>Tecnologia escolhida com critério de dono.</span>
+                </div>
+              </li>
+            </ol>
+            <a class="cta" style="margin-top:1rem;" href="mailto:contato@louzadadigitalhub.com?subject=Solicitar%20orçamento%20-%20Louzada%20Digital%20Hub">
+              Solicitar orçamento
+              <span class="cta-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+          </div>
+
+          <div class="desktop-only" style="text-align:center;margin-top:1rem;flex-shrink:0;display:block;">
             <a class="cta" href="mailto:contato@louzadadigitalhub.com?subject=Solicitar%20orçamento%20-%20Louzada%20Digital%20Hub">
               Solicitar orçamento
               <span class="cta-icon" aria-hidden="true">
@@ -1187,24 +1393,36 @@
   <script>
     (function () {
       var FRAME_COUNT = 357;
-      var PX_PER_FRAME = 14;
-      var LERP = 0.22;
-      var SECTION_COUNT = 5;
+      var isMobile = window.matchMedia("(max-width: 900px)").matches;
+      /* Mobile: rolagem um pouco mais longa = seções ficam mais legíveis */
+      var PX_PER_FRAME = isMobile ? 18 : 14;
+      var LERP = isMobile ? 0.18 : 0.22;
 
-      /* Faixas de progresso 0–1 para cada painel (com sobreposição suave) */
-      var RANGES = [
-        [0.00, 0.18],
-        [0.16, 0.36],
-        [0.34, 0.56],
-        [0.54, 0.76],
-        [0.74, 1.00]
-      ];
+      /* Faixas de progresso 0–1 — no mobile com mais “ar” entre seções */
+      var RANGES = isMobile
+        ? [
+            [0.00, 0.20],
+            [0.18, 0.38],
+            [0.36, 0.58],
+            [0.56, 0.76],
+            [0.74, 1.00]
+          ]
+        : [
+            [0.00, 0.18],
+            [0.16, 0.36],
+            [0.34, 0.56],
+            [0.54, 0.76],
+            [0.74, 1.00]
+          ];
 
       var track = document.getElementById("track");
       var stage = document.getElementById("stage");
       var canvas = document.getElementById("sequence");
       var scrim = document.getElementById("scrim");
+      var progressEl = document.getElementById("progress");
+      var labelEl = document.getElementById("sectionLabel");
       var panels = Array.prototype.slice.call(document.querySelectorAll("[data-panel]"));
+      var dots = progressEl ? Array.prototype.slice.call(progressEl.querySelectorAll("span")) : [];
       var ctx = canvas.getContext("2d", { alpha: false });
 
       var images = new Array(FRAME_COUNT);
@@ -1215,6 +1433,8 @@
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       function setTrackHeight() {
+        isMobile = window.matchMedia("(max-width: 900px)").matches;
+        PX_PER_FRAME = isMobile ? 18 : 14;
         var stageH = Math.min(900, window.innerHeight);
         var run = (FRAME_COUNT - 1) * PX_PER_FRAME;
         track.style.height = (stageH + run) + "px";
@@ -1298,9 +1518,19 @@
           if (i === best) panels[i].classList.add("is-active");
           else panels[i].classList.remove("is-active");
         }
-        /* scrim um pouco mais leve nas seções de prova/benefícios */
+        for (i = 0; i < dots.length; i++) {
+          if (i === best) dots[i].classList.add("is-on");
+          else dots[i].classList.remove("is-on");
+        }
+        if (labelEl && panels[best]) {
+          var lab = panels[best].getAttribute("data-label") || panels[best].getAttribute("aria-label") || "";
+          labelEl.textContent = lab;
+          labelEl.classList.toggle("is-on", isMobile && lab.length > 0);
+        }
+        /* Mobile: scrim mais leve para o filme aparecer */
         if (scrim) {
-          scrim.style.opacity = best >= 3 ? "0.85" : "1";
+          if (isMobile) scrim.style.opacity = best === 0 ? "0.92" : "0.78";
+          else scrim.style.opacity = best >= 3 ? "0.85" : "1";
         }
       }
 
