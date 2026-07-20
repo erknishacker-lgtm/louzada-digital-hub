@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <title>Sequência</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: #000;
+    }
+
+    body {
+      overscroll-behavior: none;
+    }
+
+    #pin {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 1;
+    }
+
+    #sequence {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Espaço invisível que cria a rolagem */
+    #spacer {
+      position: relative;
+      z-index: 0;
+      width: 1px;
+      /* altura real definida em JS */
+      height: 500vh;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="pin">
+    <canvas id="sequence" width="1920" height="1080"></canvas>
+  </div>
+  <div id="spacer"></div>
+
+  <script>
+    (function () {
+      var FRAME_COUNT = 357;
+      var PX_PER_FRAME = 14;
+      var LERP = 0.22;
+
+      var canvas = document.getElementById("sequence");
+      var spacer = document.getElementById("spacer");
+      var ctx = canvas.getContext("2d", { alpha: false });
+
+      var images = new Array(FRAME_COUNT);
+      var loadedCount = 0;
+      var target = 0;
+      var current = 0;
+      var lastDrawn = -1;
+      var ticking = false;
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      spacer.style.height = (window.innerHeight + (FRAME_COUNT - 1) * PX_PER_FRAME) + "px";
+
+      function frameUrl(i) {
+        // i: 0..FRAME_COUNT-1  → frame-0001.jpg
+        var n = i + 1;
+        var s = String(n);
+        while (s.length < 4) s = "0" + s;
+        return "frames/frame-" + s + ".jpg";
+      }
+
+      function resize() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var w = Math.max(1, Math.floor(window.innerWidth * dpr));
+        var h = Math.max(1, Math.floor(window.innerHeight * dpr));
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+          lastDrawn = -1;
+        }
+        spacer.style.height = (window.innerHeight + (FRAME_COUNT - 1) * PX_PER_FRAME) + "px";
+      }
+
+      function draw(index) {
+        var img = images[index];
+        if (!img || !img.naturalWidth) return;
+
+        var cw = canvas.width;
+        var ch = canvas.height;
+        var iw = img.naturalWidth;
+        var ih = img.naturalHeight;
+        var scale = Math.max(cw / iw, ch / ih);
+        var dw = iw * scale;
+        var dh = ih * scale;
+        var dx = (cw - dw) * 0.5;
+        var dy = (ch - dh) * 0.5;
+
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.drawImage(img, dx, dy, dw, dh);
+        lastDrawn = index;
+      }
+
+      function nearestLoaded(index) {
+        if (images[index] && images[index].naturalWidth) return index;
+        var i;
+        for (i = 1; i < FRAME_COUNT; i++) {
+          if (index - i >= 0 && images[index - i] && images[index - i].naturalWidth) return index - i;
+          if (index + i < FRAME_COUNT && images[index + i] && images[index + i].naturalWidth) return index + i;
+        }
+        return -1;
+      }
+
+      function maxScroll() {
+        return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      }
+
+      function readTarget() {
+        var p = window.scrollY / maxScroll();
+        if (p < 0) p = 0;
+        if (p > 1) p = 1;
+        target = p * (FRAME_COUNT - 1);
+      }
+
+      function loop() {
+        ticking = false;
+
+        if (reduce) {
+          current = target;
+        } else {
+          var d = target - current;
+          if (Math.abs(d) < 0.002) current = target;
+          else current += d * LERP;
+        }
+
+        var idx = Math.round(current);
+        if (idx < 0) idx = 0;
+        if (idx > FRAME_COUNT - 1) idx = FRAME_COUNT - 1;
+
+        var use = nearestLoaded(idx);
+        if (use >= 0 && use !== lastDrawn) draw(use);
+
+        if (!reduce && Math.abs(target - current) > 0.002) {
+          ticking = true;
+          requestAnimationFrame(loop);
+        }
+      }
+
+      function requestLoop() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(loop);
+        }
+      }
+
+      function onScroll() {
+        readTarget();
+        requestLoop();
+      }
+
+      function preload() {
+        var i = 0;
+        var concurrent = 16;
+
+        function kick() {
+          if (i >= FRAME_COUNT) return;
+          var index = i++;
+          var img = new Image();
+          img.decoding = "async";
+          img.onload = function () {
+            images[index] = img;
+            loadedCount++;
+            if (loadedCount === 1) {
+              resize();
+              draw(0);
+            }
+            // se o usuário já rolou, atualiza com o frame recém-chegado
+            if (Math.round(current) === index || nearestLoaded(Math.round(current)) === index) {
+              lastDrawn = -1;
+              requestLoop();
+            }
+            kick();
+          };
+          img.onerror = function () {
+            loadedCount++;
+            kick();
+          };
+          img.src = frameUrl(index);
+        }
+
+        for (var s = 0; s < concurrent; s++) kick();
+      }
+
+      resize();
+      window.addEventListener("resize", function () {
+        resize();
+        readTarget();
+        requestLoop();
+      }, { passive: true });
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("wheel", onScroll, { passive: true });
+      window.addEventListener("touchmove", onScroll, { passive: true });
+
+      // primeiro frame imediato
+      var first = new Image();
+      first.onload = function () {
+        images[0] = first;
+        loadedCount = Math.max(loadedCount, 1);
+        resize();
+        draw(0);
+      };
+      first.src = frameUrl(0);
+
+      preload();
+      readTarget();
+      requestLoop();
+    })();
+  </script>
+</body>
+</html>
